@@ -1,5 +1,5 @@
 import http from 'http'
-import { insertCollection } from './services/usuarioService.js'
+import { findUser, insertCollection } from './services/usuarioService.js'
 import conectarDB from './db.js'
 
 const server = http.createServer(async (req, res) => {
@@ -8,13 +8,24 @@ const server = http.createServer(async (req, res) => {
   if (req.method === 'POST' && req.url === '/usuario') {
     try {
       const usuario = await insertCollection({
-        nombre: 'Mariana',
-        edad: 900,
-        propiedades: true,
+        nombre: 'Bryan',
+        edad: 27,
       })
 
       res.writeHead(200, { 'content-type': 'application/json' })
       res.end(JSON.stringify(usuario))
+    } catch (err) {
+      res.writeHead(401)
+      res.end(err)
+    }
+  }
+
+  if (req.method === 'GET' && req.url === '/usuario') {
+    try {
+      const user = await findUser({ nombre: 'Jose' })
+
+      res.writeHead(200, { 'content-type': 'application/json' })
+      res.end(JSON.stringify(user))
     } catch (err) {
       res.writeHead(401)
       res.end(err)

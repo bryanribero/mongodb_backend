@@ -1,9 +1,9 @@
 import Usuario from '../models/Usuario.js'
 
 export async function insertCollection(dato) {
-  const newUser = new Usuario(dato)
+  return await Usuario.create(dato)
+}
 
-  const savedUser = await newUser.save()
-
-  return savedUser
+export async function findUser(condition = {}) {
+  return await Usuario.find(condition)
 }
