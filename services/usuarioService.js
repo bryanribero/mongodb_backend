@@ -13,3 +13,7 @@ export async function updateAndFindUser(condition, set) {
     returnDocument: 'after',
   })
 }
+
+export async function deleteUser(filter) {
+  return await Usuario.deleteOne(filter)
+}

@@ -1,5 +1,6 @@
 import http from 'http'
 import {
+  deleteUser,
   findUser,
   insertCollection,
   updateAndFindUser,
@@ -42,6 +43,18 @@ const server = http.createServer(async (req, res) => {
         { nombre: 'Jose' },
         { $set: { nombre: 'Ya no es Jose' } }
       )
+
+      res.writeHead(200, { 'content-type': 'application/json' })
+      res.end(JSON.stringify(user))
+    } catch (err) {
+      res.writeHead(401)
+      res.end(err)
+    }
+  }
+
+  if (req.method === 'DELETE' && req.url === '/usuario') {
+    try {
+      const user = await deleteUser({ nombre: 'Ya no es Jose' })
 
       res.writeHead(200, { 'content-type': 'application/json' })
       res.end(JSON.stringify(user))
