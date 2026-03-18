@@ -3,6 +3,7 @@ import {
   deleteUser,
   findUser,
   insertCollection,
+  transactionUser,
   updateAndFindUser,
 } from './services/usuarioService.js'
 import conectarDB from './db.js'
@@ -61,6 +62,28 @@ const server = http.createServer(async (req, res) => {
     } catch (err) {
       res.writeHead(401)
       res.end(err)
+    }
+  }
+
+  if (req.method === 'POST' && req.url === '/usuario/transaction') {
+    try {
+      await transactionUser(
+        { nombre: 'Luna', edad: 20 },
+        { nombre: 'Phenix' },
+        { edad: 300 },
+        2
+      )
+
+      res.writeHead(200, { 'content-type': 'application/json' })
+      res.end(JSON.stringify({ result: 'Succesfull' }))
+    } catch (err) {
+      res.writeHead(401, { 'content-type': 'application/json' })
+      res.end(
+        JSON.stringify({
+          mensaje: err.message,
+          cause: Object.keys(err).length === 0 ? 'Sin causa' : err,
+        })
+      )
     }
   }
 })
