@@ -1,5 +1,9 @@
 import http from 'http'
-import { findUser, insertCollection } from './services/usuarioService.js'
+import {
+  findUser,
+  insertCollection,
+  updateAndFindUser,
+} from './services/usuarioService.js'
 import conectarDB from './db.js'
 
 const server = http.createServer(async (req, res) => {
@@ -23,6 +27,21 @@ const server = http.createServer(async (req, res) => {
   if (req.method === 'GET' && req.url === '/usuario') {
     try {
       const user = await findUser({ nombre: 'Jose' })
+
+      res.writeHead(200, { 'content-type': 'application/json' })
+      res.end(JSON.stringify(user))
+    } catch (err) {
+      res.writeHead(401)
+      res.end(err)
+    }
+  }
+
+  if (req.method === 'PATCH' && req.url === '/usuario') {
+    try {
+      const user = await updateAndFindUser(
+        { nombre: 'Jose' },
+        { $set: { nombre: 'Ya no es Jose' } }
+      )
 
       res.writeHead(200, { 'content-type': 'application/json' })
       res.end(JSON.stringify(user))
